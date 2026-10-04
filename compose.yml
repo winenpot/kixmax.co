@@ -1,0 +1,42 @@
+name: kixmax-co
+
+services:
+  mirror:
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+    image: kixmax-co:app
+    pull_policy: never
+    restart: unless-stopped
+    # Node handles SIGTERM itself and drains in-flight requests, so it needs to be
+    # PID 1 to receive the signal Docker sends on stop.
+    init: true
+
+    environment:
+      NODE_ENV: production
+      MIRROR_SITE_DIR: /app/kixmax-site
+      MIRROR_DATA_DIR: /app/data
+      MIRROR_ADMIN_TOKEN: ${MIRROR_ADMIN_TOKEN:-}
+      MIRROR_TRUST_PROXY: ${MIRROR_TRUST_PROXY:-0}
+
+    volumes:
+      - data:/app/data
+
+    ports:
+      - "${MIRROR_BIND:-127.0.0.1}:${MIRROR_PORT:-8092}:8080"
+
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  data:

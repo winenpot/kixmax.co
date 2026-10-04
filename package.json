@@ -1,0 +1,23 @@
+{
+  "name": "kixmax-mirror",
+  "version": "1.0.0",
+  "description": "Static mirror of kixmax.co with working Elementor form submissions and search",
+  "main": "server.js",
+  "scripts": {
+    "mirror": "node scrape.js",
+    "mirror:lists": "node complete-lists.js",
+    "start": "node server.js",
+    "check": "node --check scrape.js && node --check complete-lists.js && node --check server.js && node --check server-client.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@12.4.1",
+  "type": "module",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "dependencies": {
+    "puppeteer": "^25.11.0"
+  }
+}

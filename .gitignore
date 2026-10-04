@@ -1,0 +1,8 @@
+node_modules/
+data/
+*.log
+.env
+# Mirror content -- a capture is large and re-creatable; keep it out of git
+kixmax-site/
+# Local analysis output
+graphify-out/
